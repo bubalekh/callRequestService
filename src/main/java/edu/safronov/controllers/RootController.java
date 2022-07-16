@@ -1,22 +1,36 @@
 package edu.safronov.controllers;
 
+import edu.safronov.models.CallRequestModel;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Controller
 public class RootController {
+
+    private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
     @GetMapping("/")
-    public String showRootView(HttpServletRequest request) {
+    public String showRootView(HttpServletRequest request, Model model) {
+        model.addAttribute("callRequest", new CallRequestModel());
         Optional<String> mobileHeader = Optional.ofNullable(request.getHeader("user-agent"));
         if (mobileHeader.isPresent()) {
             if (mobileHeader.get().contains("Android") || mobileHeader.get().contains("iPhone")) {
-                System.out.println("Mobile client");
-                return "index-mobile"; //TODO: необходимо разработать шаблон для смартфонов
+                templateType = "mobile/"; //TODO: необходимо разработать шаблон для смартфонов
             }
         }
-        return "index";
+        return templateType + "index";
     }
+
+    @PostMapping("/callRequest")
+    public String callRequest(@ModelAttribute CallRequestModel callRequest, Model model) {
+        System.out.println(callRequest.toString());
+        model.addAttribute("callRequest", callRequest);
+        return templateType + "result";
+    }
+
 }

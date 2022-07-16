@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <link th:href="@{~/styles/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<form action="#" th:action="@{/callRequest}" th:object="${callRequest}" method="post">
+    <div class="rendered-form">
+        <div class="formbuilder-text form-group field-firstName">
+            <label for="firstName" class="formbuilder-text-label">Ваше имя<span
+                    class="formbuilder-required">*</span></label>
+            <input type="text" th:field="*{name}" placeholder="Сергей" class="form-control" name="firstName" access="false"
+                   maxlength="20" id="firstName" required="required" aria-required="true">
+        </div>
+        <div class="formbuilder-text form-group field-phone">
+            <label for="phone" class="formbuilder-text-label">Ваш номер телефона<span
+                    class="formbuilder-required">*</span></label>
+            <input type="text" th:field="*{phone}" placeholder="+7(987)123-456-78-90" class="form-control" name="phone" access="false"
+                   maxlength="20" id="phone" required="required" aria-required="true">
+        </div>
+        <div class="formbuilder-date form-group field-date">
+            <label for="date" class="formbuilder-date-label">Выберите дату для звонка<span class="formbuilder-required">*</span></label>
+            <input type="date" th:field="*{date}" class="form-control" access="false" value="2022-07-14" id="date"
+                   required="required" aria-required="true">
+        </div>
+        <div class="formbuilder-select form-group field-selectTime">
+            <label for="selectTime" class="formbuilder-select-label">Укажите время для звонка<span
+                    class="tooltip-element"
+                    tooltip="Если вы не укажете время для звонка, то я перезвоню Вам в течение дня в удобное для меня время.">?</span></label>
+            <select class="form-control" id="selectTime" th:field="*{time}">
+                <option th:value="'09:00'" th:text="'09:00'"></option>
+                <option th:value="'09:30'" th:text="'09:30'"></option>
+                <option th:value="'10:00'" th:text="'10:00'"></option>
+                <option th:value="'10:30'" th:text="'10:30'"></option>
+                <option th:value="'11:00'" th:text="'11:00'"></option>
+                <option th:value="'11:30'" th:text="'11:30'"></option>
+                <option th:value="'13:00'" th:text="'13:00'"></option>
+                <option th:value="'13:30'" th:text="'13:30'"></option>
+                <option th:value="'14:00'" th:text="'14:00'"></option>
+                <option th:value="'14:30'" th:text="'14:30'"></option>
+                <option th:value="'15:00'" th:text="'15:00'"></option>
+                <option th:value="'15:30'" th:text="'15:30'"></option>
+                <option th:value="'16:00'" th:text="'16:00'"></option>
+                <option th:value="'16:30'" th:text="'16:30'"></option>
+                <option th:value="'17:00'" th:text="'17:00'"></option>
+            </select>
+        </div>
+        <div class="formbuilder-button form-group field-buttonSubmit">
+            <button type="submit" class="btn-primary btn" name="buttonSubmit" access="false" style="primary"
+                    id="buttonSubmit">Запланировать звонок
+            </button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
