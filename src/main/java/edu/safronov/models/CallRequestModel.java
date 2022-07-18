@@ -1,5 +1,7 @@
 package edu.safronov.models;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
@@ -7,35 +9,23 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class CallRequestModel {
+    @Getter @Setter
     private String name;
+    @Getter @Setter
     private String phone;
     private final Calendar date = Calendar.getInstance();
+    @Getter @Setter
     private String time;
+    @Getter
     private final List<String> availableTime;
 
     public CallRequestModel() {
         this.availableTime = this.generateAvailableTime(this.date);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
     public String getParsedPhone() {
         var temp = phone.replaceAll("\\D", "");
         return "+7" + temp.substring(temp.length() - 10);
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
     }
 
     public String getDate() {
@@ -52,17 +42,6 @@ public class CallRequestModel {
         return this.date;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public List<String> getAvailableTime() {
-        return availableTime;
-    }
 
     @Override
     public String toString() {
