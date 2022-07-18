@@ -1,13 +1,12 @@
 package edu.safronov.controllers;
 
 import edu.safronov.models.CallRequestModel;
+import edu.safronov.services.RecaptchaService;
 import edu.safronov.services.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -16,10 +15,15 @@ import java.util.Optional;
 public class RootController {
 
     @Autowired
-    private TelegramService service;
+    private TelegramService telegramService;
+
+    @Autowired
+    private RecaptchaService recaptchaService;
     private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
     @GetMapping("/")
-    public String showRootView(HttpServletRequest request, Model model) {
+    public String showRootView(HttpServletRequest request,
+                               Model model)
+    {
         model.addAttribute("callRequest", new CallRequestModel());
         Optional<String> mobileHeader = Optional.ofNullable(request.getHeader("user-agent"));
         if (mobileHeader.isPresent()) {
@@ -30,12 +34,15 @@ public class RootController {
         return templateType + "index";
     }
 
-    @PostMapping("/callRequest")
-    public String callRequest(@ModelAttribute CallRequestModel callRequest, Model model) {
+    @PostMapping("/request")
+    public String callRequest(@ModelAttribute CallRequestModel callRequest,
+                              @RequestParam("g-recaptcha-response") String recaptchaResponse,
+                              Model model) {
         callRequest.addTimeToDate(callRequest.getTime());
-        //System.out.println(callRequest.getPhone());
-        service.callRequestNotification(callRequest);
-        model.addAttribute("callRequest", callRequest);
+        if (recaptchaService.isHuman(recaptchaResponse)) {
+            telegramService.callRequestNotification(callRequest);
+            model.addAttribute("callRequest", callRequest);
+        }
         return templateType + "result";
     }
 }
