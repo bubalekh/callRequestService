@@ -16,7 +16,6 @@ public class RootController {
 
     @Autowired
     private TelegramService telegramService;
-
     @Autowired
     private RecaptchaService recaptchaService;
     private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
@@ -37,12 +36,14 @@ public class RootController {
     @PostMapping("/request")
     public String callRequest(@ModelAttribute CallRequestModel callRequest,
                               @RequestParam("g-recaptcha-response") String recaptchaResponse,
-                              Model model) {
+                              Model model)
+    {
         callRequest.addTimeToDate(callRequest.getTime());
+        model.addAttribute("callRequest", callRequest);
         if (recaptchaService.isHuman(recaptchaResponse)) {
             telegramService.callRequestNotification(callRequest);
-            model.addAttribute("callRequest", callRequest);
+            return templateType + "result";
         }
-        return templateType + "result";
+        return templateType + "index";
     }
 }

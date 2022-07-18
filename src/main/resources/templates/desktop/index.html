@@ -35,7 +35,7 @@
                 <option th:each="i : ${callRequest.availableTime}" th:value="${i}" th:text="${i}"></option>
             </select>
         </div>
-        <div class="g-recaptcha col-sm-5" th:attr="data-sitekey=${@recaptchaService.getSite()}"></div>
+        <div class="g-recaptcha col-sm-5" th:attr="data-sitekey=${@recaptchaService.getSite()}" aria-required="true"></div>
         <span id="captchaError" class="alert alert-danger col-sm-4" style="display:none"></span>
         <div class="formbuilder-button form-group field-buttonSubmit">
             <button type="submit" class="btn-primary btn" name="buttonSubmit" access="false" style="primary"
