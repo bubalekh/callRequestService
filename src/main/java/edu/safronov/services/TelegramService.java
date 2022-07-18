@@ -1,6 +1,10 @@
 package edu.safronov.services;
 
-import edu.safronov.models.CallRequestModel;
+import edu.safronov.domain.CallRequest;
+import edu.safronov.domain.User;
+import edu.safronov.repos.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -11,9 +15,11 @@ import java.util.List;
 
 @Component
 public class TelegramService extends TelegramLongPollingBot {
-    private final String pwd = "!Dreamer676841995";
-    private Long myChatId = null;
+    @Value("${telegram.auth.password}")
+    private String pwd;
 
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public String getBotUsername() {
         return "Бот для заявок на звонок>";
@@ -46,7 +52,16 @@ public class TelegramService extends TelegramLongPollingBot {
                         message.setText("Ошибка! Проверьте введенный Вами пароль!");
                         break;
                     }
-                    myChatId = update.getMessage().getChatId();
+                    User user = new User();
+                    Iterable<User> users = userRepository.findAll();
+                    if (users.iterator().hasNext()) {
+                       user.setChatId(users.iterator().next().getChatId());
+                    }
+                    else {
+                        user.setChatId(update.getMessage().getChatId());
+                        userRepository.save(user);
+                    }
+                    message.setChatId(user.getChatId());
                     message.setText("Вы успешно авторизовались! Теперь Вам будут приходить уведомления о новых звонках!");
                 }
 
@@ -66,14 +81,16 @@ public class TelegramService extends TelegramLongPollingBot {
         super.onUpdatesReceived(updates);
     }
 
-    public void callRequestNotification(CallRequestModel model) {
-        if (myChatId != null) {
+    public void callRequestNotification(CallRequest model) {
+        Iterable<User> users = userRepository.findAll();
+        Long chatId = users.iterator().hasNext() ? users.iterator().next().getChatId() : null;
+        if (chatId != null) {
             SendMessage message = new SendMessage();
-            message.setChatId(myChatId);
+            message.setChatId(chatId);
             message.setText("Пользователь "
                     + model.getName()
                     + " запланировал звонок с Вами на "
-                    + model.getDate()
+                    + model.getCalendar()
                     + " в "
                     + model.getTime()
                     + ". Номер телефона: "

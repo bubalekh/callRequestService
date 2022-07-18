@@ -1,26 +1,39 @@
-package edu.safronov.models;
+package edu.safronov.domain;
 
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
+import javax.persistence.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class CallRequestModel {
+@Entity
+public class CallRequest {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", nullable = false)
+    @Getter
+    @Setter
+    private Long id;
+
     @Getter @Setter
     private String name;
     @Getter @Setter
     private String phone;
-    private final Calendar date = Calendar.getInstance();
+
+    private String date;
+    @Transient
+    private final Calendar calendar = Calendar.getInstance();
     @Getter @Setter
     private String time;
+    @Transient
     @Getter
     private final List<String> availableTime;
 
-    public CallRequestModel() {
-        this.availableTime = this.generateAvailableTime(this.date);
+    public CallRequest() {
+        this.availableTime = this.generateAvailableTime(this.calendar);
     }
 
     public String getParsedPhone() {
@@ -30,16 +43,16 @@ public class CallRequestModel {
 
     public String getDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return dateFormat.format(date.getTime());
+        return dateFormat.format(calendar.getTime());
     }
 
     public void setDate(String date) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        this.date.setTime(dateFormat.parse(date));
+        this.calendar.setTime(dateFormat.parse(date));
     }
 
     public Calendar getCalendar() {
-        return this.date;
+        return this.calendar;
     }
 
 
@@ -48,7 +61,7 @@ public class CallRequestModel {
         return "CallRequestModel{" +
                 "name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", date=" + date.getTime() +
+                ", date=" + calendar.getTime() +
                 ", time='" + time + '\'' +
                 '}';
     }
@@ -57,8 +70,8 @@ public class CallRequestModel {
         if (time.length() == 5) {
             var hours = Integer.parseInt(time.substring(0, time.indexOf(':')));
             var minutes = Integer.parseInt(time.substring(time.indexOf(':') + 1));
-            date.set(Calendar.HOUR_OF_DAY, hours);
-            date.set(Calendar.MINUTE, minutes);
+            calendar.set(Calendar.HOUR_OF_DAY, hours);
+            calendar.set(Calendar.MINUTE, minutes);
         }
     }
 
@@ -66,8 +79,8 @@ public class CallRequestModel {
         var availableHours = calendar.get(Calendar.HOUR_OF_DAY);
         if (availableHours >= 17) {
             availableHours = 9;
-            this.date.add(Calendar.DAY_OF_WEEK, 1);
-            this.date.set(Calendar.MINUTE, 0);
+            this.calendar.add(Calendar.DAY_OF_WEEK, 1);
+            this.calendar.set(Calendar.MINUTE, 0);
         } else if (availableHours <= 9) {
             availableHours = 9;
             //this.date.set(Calendar.MINUTE, 0);

@@ -1,13 +1,14 @@
 package edu.safronov.models;
 
+import edu.safronov.domain.CallRequest;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-class CallRequestModelTest {
+class CallRequestTest {
 
     private final Calendar testDate = Calendar.getInstance();
-    private final CallRequestModel testObject = new CallRequestModel();
+    private final CallRequest testObject = new CallRequest();
 
     @Test
     void addTimeToDateTest() {
