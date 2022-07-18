@@ -30,21 +30,8 @@
                     class="tooltip-element"
                     tooltip="Если вы не укажете время для звонка, то я перезвоню Вам в течение дня в удобное для меня время.">?</span></label>
             <select class="form-control" id="selectTime" th:field="*{time}">
-                <option th:value="'09:00'" th:text="'09:00'"></option>
-                <option th:value="'09:30'" th:text="'09:30'"></option>
-                <option th:value="'10:00'" th:text="'10:00'"></option>
-                <option th:value="'10:30'" th:text="'10:30'"></option>
-                <option th:value="'11:00'" th:text="'11:00'"></option>
-                <option th:value="'11:30'" th:text="'11:30'"></option>
-                <option th:value="'13:00'" th:text="'13:00'"></option>
-                <option th:value="'13:30'" th:text="'13:30'"></option>
-                <option th:value="'14:00'" th:text="'14:00'"></option>
-                <option th:value="'14:30'" th:text="'14:30'"></option>
-                <option th:value="'15:00'" th:text="'15:00'"></option>
-                <option th:value="'15:30'" th:text="'15:30'"></option>
-                <option th:value="'16:00'" th:text="'16:00'"></option>
-                <option th:value="'16:30'" th:text="'16:30'"></option>
-                <option th:value="'17:00'" th:text="'17:00'"></option>
+                <option value="0">Выберите время</option>
+                <option th:each="i : ${callRequest.availableTime}" th:value="${i}" th:text="${i}"></option>
             </select>
         </div>
         <div class="formbuilder-button form-group field-buttonSubmit">
