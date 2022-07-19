@@ -1,14 +1,15 @@
 package edu.safronov.controllers;
 
-import edu.safronov.models.CallRequestModel;
+import edu.safronov.domain.CallRequest;
+import edu.safronov.repos.CallRequestRepository;
 import edu.safronov.services.RecaptchaService;
+import edu.safronov.services.SchedulerService;
 import edu.safronov.services.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 @Controller
@@ -18,13 +19,17 @@ public class RootController {
     private TelegramService telegramService;
     @Autowired
     private RecaptchaService recaptchaService;
+    @Autowired
+    private SchedulerService schedulerService;
+    @Autowired
+    private CallRequestRepository callRequestRepository;
     private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
     @GetMapping("/")
-    public String showRootView(HttpServletRequest request,
+    public String showRootView(@RequestHeader("User-Agent") String agent,
                                Model model)
     {
-        model.addAttribute("callRequest", new CallRequestModel());
-        Optional<String> mobileHeader = Optional.ofNullable(request.getHeader("user-agent"));
+        model.addAttribute("callRequest", new CallRequest());
+        Optional<String> mobileHeader = Optional.ofNullable(agent);
         if (mobileHeader.isPresent()) {
             if (mobileHeader.get().contains("Android") || mobileHeader.get().contains("iPhone")) {
                 //templateType = "mobile/"; //TODO: необходимо разработать шаблон для смартфонов
@@ -34,14 +39,17 @@ public class RootController {
     }
 
     @PostMapping("/request")
-    public String callRequest(@ModelAttribute CallRequestModel callRequest,
+    public String callRequest(@ModelAttribute CallRequest callRequest,
                               @RequestParam("g-recaptcha-response") String recaptchaResponse,
                               Model model)
     {
         callRequest.addTimeToDate(callRequest.getTime());
         model.addAttribute("callRequest", callRequest);
         if (recaptchaService.isHuman(recaptchaResponse)) {
-            telegramService.callRequestNotification(callRequest);
+            callRequest.setActive(true);
+            callRequestRepository.save(callRequest);
+            telegramService.callRequestNotification(callRequest, true);
+            schedulerService.checkNewRequest(callRequest);
             return templateType + "result";
         }
         return templateType + "index";
