@@ -24,7 +24,6 @@ public class RecaptchaService {
         RestTemplate template = new RestTemplate();
         String url = "https://google.com/recaptcha/api/siteverify?secret=%s&response=%s";
         RecaptchaResponseDto response = template.postForObject(String.format(url, secret, captchaResponse), Collections.emptyList(), RecaptchaResponseDto.class);
-        System.out.println(response);
         return response != null && response.isSuccess();
     }
 }

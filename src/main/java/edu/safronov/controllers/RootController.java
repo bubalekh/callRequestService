@@ -3,6 +3,7 @@ package edu.safronov.controllers;
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
 import edu.safronov.services.RecaptchaService;
+import edu.safronov.services.SchedulerService;
 import edu.safronov.services.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,8 @@ public class RootController {
     private TelegramService telegramService;
     @Autowired
     private RecaptchaService recaptchaService;
+    @Autowired
+    private SchedulerService schedulerService;
     @Autowired
     private CallRequestRepository callRequestRepository;
     private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
@@ -43,8 +46,10 @@ public class RootController {
         callRequest.addTimeToDate(callRequest.getTime());
         model.addAttribute("callRequest", callRequest);
         if (recaptchaService.isHuman(recaptchaResponse)) {
+            callRequest.setActive(true);
             callRequestRepository.save(callRequest);
-            telegramService.callRequestNotification(callRequest);
+            telegramService.callRequestNotification(callRequest, true);
+            schedulerService.checkNewRequest(callRequest);
             return templateType + "result";
         }
         return templateType + "index";
