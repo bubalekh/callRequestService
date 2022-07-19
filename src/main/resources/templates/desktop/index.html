@@ -4,9 +4,10 @@
 <head>
     <meta charset="UTF-8"/>
     <link th:href="@{~/styles/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-<form action="#" th:action="@{/callRequest}" th:object="${callRequest}" method="post">
+<form action="#" th:action="@{/request}" th:object="${callRequest}" method="post">
     <div class="rendered-form">
         <div class="formbuilder-text form-group field-firstName">
             <label for="firstName" class="formbuilder-text-label">Ваше имя<span
@@ -34,6 +35,8 @@
                 <option th:each="i : ${callRequest.availableTime}" th:value="${i}" th:text="${i}"></option>
             </select>
         </div>
+        <div class="g-recaptcha form-group col-sm-5" th:attr="data-sitekey=${@recaptchaService.getSite()}"></div>
+        <span id="captchaError" class="alert alert-danger col-sm-4" style="display:none"></span>
         <div class="formbuilder-button form-group field-buttonSubmit">
             <button type="submit" class="btn-primary btn" name="buttonSubmit" access="false" style="primary"
                     id="buttonSubmit">Запланировать звонок
