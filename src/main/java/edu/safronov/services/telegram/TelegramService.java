@@ -1,8 +1,10 @@
-package edu.safronov.services;
+package edu.safronov.services.telegram;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;
+import edu.safronov.services.telegram.events.Default;
+import edu.safronov.services.telegram.events.TelegramEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -11,20 +13,24 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class TelegramService extends TelegramLongPollingBot {
-    @Value("${telegram.auth.password}")
-    private String pwd;
-
     @Value("${telegram.bot.token}")
     private String botToken;
 
     @Autowired
     private UserRepository userRepository;
+
+    private final Map<String, TelegramEvent> events;
+
+    public TelegramService(@Autowired List<TelegramEvent> eventsList) {
+        this.events = eventsList.stream().collect(Collectors.toMap(TelegramEvent::getEventName, Function.identity()));
+    }
+
     @Override
     public String getBotUsername() {
         return "Бот для заявок на звонок>";
@@ -38,40 +44,28 @@ public class TelegramService extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage message = new SendMessage();
-            message.setChatId(update.getMessage().getChatId().toString());
-            message.setText("Ошибка, команды не существует");
-            var spaceIndex = update.getMessage().getText().indexOf(' ');
-            var command = update.getMessage().getText();
-            var payload = "";
-            if (spaceIndex > 0) {
-                command = update.getMessage().getText().substring(0, spaceIndex);
-                payload = update.getMessage().getText().substring(spaceIndex + 1);
-            }
-            switch (command) {
-                case "/start" -> message.setText("Для работы с данным ботом Вам необходимо авторизоваться по паролю (Пример: /auth 12345)");
+            var command = update
+                    .getMessage()
+                    .getText()
+                    .contains(" ")
+                    ? update
+                            .getMessage()
+                            .getText()
+                            .substring(0, update
+                                    .getMessage()
+                                    .getText()
+                                    .indexOf(' '))
+                    : update
+                            .getMessage()
+                            .getText();
 
-                case "/auth" -> {
-                    if (payload.equals(pwd)) {
-                        userRepository.findAll().forEach(user -> {
-                            if (!Objects.equals(user.getChatId(), update.getMessage().getChatId())) {
-                                User tempUser = new User();
-                                tempUser.setChatId(update.getMessage().getChatId());
-                                userRepository.save(tempUser);
-                            }
-                            else {
-                                message.setChatId(user.getChatId());
-                                message.setText("Вы успешно авторизовались! Теперь Вам будут приходить уведомления о новых звонках!");
-                            }
-                            try {
-                                execute(message);
-                            } catch (TelegramApiException e) {
-                                e.printStackTrace();
-                            }
-                        });
-                    }
-                }
-                default -> {}
+            SendMessage message = new SendMessage();
+            events.getOrDefault(command, new Default()).handleEvent(update, message);
+            message.setChatId(update.getMessage().getChatId());
+            try {
+                execute(message);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -93,8 +87,7 @@ public class TelegramService extends TelegramLongPollingBot {
                         + model.getTime()
                         + ". Номер телефона: "
                         + model.getParsedPhone());
-            }
-            else {
+            } else {
                 message.setText("Пользователь "
                         + model.getName()
                         + " ожидает Вашего звонка сегодня в "

@@ -1,4 +1,4 @@
-package edu.safronov.services;
+package edu.safronov.services.recaptcha;
 
 import edu.safronov.models.dto.RecaptchaResponseDto;
 import lombok.Getter;

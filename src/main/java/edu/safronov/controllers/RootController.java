@@ -2,9 +2,9 @@ package edu.safronov.controllers;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
-import edu.safronov.services.RecaptchaService;
-import edu.safronov.services.SchedulerService;
-import edu.safronov.services.TelegramService;
+import edu.safronov.services.recaptcha.RecaptchaService;
+import edu.safronov.services.scheduler.SchedulerService;
+import edu.safronov.services.telegram.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
