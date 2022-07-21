@@ -1,8 +1,8 @@
-package edu.safronov.services;
+package edu.safronov.services.scheduler;
 
-import ch.qos.logback.core.BasicStatusManager;
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
+import edu.safronov.services.telegram.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,9 @@ public class SchedulerService {
                    if (request.isActive())
                     requestList.add(request);
             });
-            scheduleNotification(requestList.stream().sorted().collect(Collectors.toList()).get(0));
+            try {
+                scheduleNotification(requestList.stream().sorted().collect(Collectors.toList()).get(0));
+            } catch (IndexOutOfBoundsException ignored) { }
         }
     }
 
