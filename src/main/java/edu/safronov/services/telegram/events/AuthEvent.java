@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Component
-public class Auth implements TelegramEvent {
+public class AuthEvent implements TelegramEvent {
     @Autowired
     private UserRepository userRepository;
 
@@ -50,7 +50,7 @@ public class Auth implements TelegramEvent {
     }
 
     @Override
-    public String getEventName() {
+    public String getEventCommand() {
         return "/auth";
     }
 }

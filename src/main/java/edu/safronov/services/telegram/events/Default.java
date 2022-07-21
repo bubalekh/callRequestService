@@ -10,7 +10,7 @@ public class Default implements TelegramEvent {
     }
 
     @Override
-    public String getEventName() {
+    public String getEventCommand() {
         return null;
     }
 }

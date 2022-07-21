@@ -5,7 +5,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
-public class Start implements TelegramEvent {
+public class StartEvent implements TelegramEvent {
 
     @Override
     public void handleEvent(Update update, SendMessage message) {
@@ -13,7 +13,7 @@ public class Start implements TelegramEvent {
     }
 
     @Override
-    public String getEventName() {
+    public String getEventCommand() {
         return "/start";
     }
 }

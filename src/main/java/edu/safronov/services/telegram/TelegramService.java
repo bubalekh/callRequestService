@@ -5,6 +5,7 @@ import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;
 import edu.safronov.services.telegram.events.Default;
 import edu.safronov.services.telegram.events.TelegramEvent;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,23 +14,18 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class TelegramService extends TelegramLongPollingBot {
+    @Getter
+    private final Map<String, TelegramEvent> events = new HashMap<>();
     @Value("${telegram.bot.token}")
     private String botToken;
-
     @Autowired
     private UserRepository userRepository;
-
-    private final Map<String, TelegramEvent> events;
-
-    public TelegramService(@Autowired List<TelegramEvent> eventsList) {
-        this.events = eventsList.stream().collect(Collectors.toMap(TelegramEvent::getEventName, Function.identity()));
-    }
 
     @Override
     public String getBotUsername() {
@@ -49,15 +45,15 @@ public class TelegramService extends TelegramLongPollingBot {
                     .getText()
                     .contains(" ")
                     ? update
+                    .getMessage()
+                    .getText()
+                    .substring(0, update
                             .getMessage()
                             .getText()
-                            .substring(0, update
-                                    .getMessage()
-                                    .getText()
-                                    .indexOf(' '))
+                            .indexOf(' '))
                     : update
-                            .getMessage()
-                            .getText();
+                    .getMessage()
+                    .getText();
 
             SendMessage message = new SendMessage();
             events.getOrDefault(command, new Default()).handleEvent(update, message);
@@ -101,7 +97,6 @@ public class TelegramService extends TelegramLongPollingBot {
                     message.setChatId(user.getChatId());
                     execute(message);
                 }
-
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
