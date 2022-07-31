@@ -1,4 +1,4 @@
-package edu.safronov.services.telegram.notifications;
+package edu.safronov.services.communications.telegram.notifications;
 
 import edu.safronov.domain.CallRequest;
 

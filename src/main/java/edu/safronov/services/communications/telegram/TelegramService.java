@@ -1,12 +1,12 @@
-package edu.safronov.services.telegram;
+package edu.safronov.services.communications.telegram;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;
-import edu.safronov.services.telegram.events.DefaultEvent;
-import edu.safronov.services.telegram.events.TelegramEvent;
-import edu.safronov.services.telegram.notifications.DefaultNotification;
-import edu.safronov.services.telegram.notifications.Notification;
+import edu.safronov.services.communications.telegram.events.DefaultEvent;
+import edu.safronov.services.communications.telegram.events.TelegramEvent;
+import edu.safronov.services.communications.telegram.notifications.DefaultNotification;
+import edu.safronov.services.communications.telegram.notifications.Notification;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

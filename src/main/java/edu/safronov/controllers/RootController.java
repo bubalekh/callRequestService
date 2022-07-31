@@ -2,9 +2,9 @@ package edu.safronov.controllers;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
-import edu.safronov.services.recaptcha.RecaptchaService;
+import edu.safronov.services.captcha.recaptcha.RecaptchaService;
 import edu.safronov.services.scheduler.SchedulerService;
-import edu.safronov.services.telegram.TelegramService;
+import edu.safronov.services.communications.telegram.CallRequestNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +16,9 @@ import java.util.Optional;
 public class RootController {
 
     @Autowired
-    private TelegramService telegramServiceImpl;
+    private CallRequestNotification notificationService;
     @Autowired
-    private RecaptchaService recaptchaService;
+    private RecaptchaService captchaService;
     @Autowired
     private SchedulerService schedulerService;
     @Autowired
@@ -40,15 +40,15 @@ public class RootController {
 
     @PostMapping("/request")
     public String callRequest(@ModelAttribute CallRequest callRequest,
-                              @RequestParam("g-recaptcha-response") String recaptchaResponse,
+                              @RequestParam("g-recaptcha-response") String captchaResponse,
                               Model model)
     {
         callRequest.addTimeToDate(callRequest.getTime());
         model.addAttribute("callRequest", callRequest);
-        if (recaptchaService.checkCaptcha(recaptchaResponse)) {
+        if (captchaService.checkCaptcha(captchaResponse)) {
             callRequest.setActive(true);
             callRequestRepository.save(callRequest);
-            telegramServiceImpl.notify(callRequest, "newRequest");
+            notificationService.notify(callRequest, "newRequest");
             schedulerService.checkNewRequest(callRequest);
             return templateType + "result";
         }

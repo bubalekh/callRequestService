@@ -1,15 +1,15 @@
-package edu.safronov.services.telegram.notifications;
+package edu.safronov.services.communications.telegram.notifications;
 
 import edu.safronov.domain.CallRequest;
+import org.springframework.stereotype.Component;
 
-public class NewRequestNotification implements Notification {
+@Component
+public class ScheduledRequestNotification implements Notification {
     @Override
     public String getNotificationMessage(CallRequest request) {
         return "Пользователь "
                 + request.getName()
-                + " запланировал звонок с Вами на "
-                + request.getDate()
-                + " в "
+                + " ожидает Вашего звонка сегодня в "
                 + request.getTime()
                 + ". Номер телефона: "
                 + request.getParsedPhone();
@@ -17,6 +17,6 @@ public class NewRequestNotification implements Notification {
 
     @Override
     public String getNotificationName() {
-        return "newRequest";
+        return "scheduledRequest";
     }
 }

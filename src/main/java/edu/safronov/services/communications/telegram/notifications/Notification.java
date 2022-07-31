@@ -1,7 +1,7 @@
-package edu.safronov.services.telegram.notifications;
+package edu.safronov.services.communications.telegram.notifications;
 
 import edu.safronov.domain.CallRequest;
-import edu.safronov.services.telegram.TelegramService;
+import edu.safronov.services.communications.telegram.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public interface Notification {

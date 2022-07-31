@@ -1,4 +1,4 @@
-package edu.safronov.services.telegram.events;
+package edu.safronov.services.communications.telegram.events;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

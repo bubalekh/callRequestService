@@ -2,7 +2,7 @@ package edu.safronov.services.scheduler;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
-import edu.safronov.services.telegram.CallRequestNotification;
+import edu.safronov.services.communications.telegram.CallRequestNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
