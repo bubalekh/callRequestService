@@ -1,4 +1,4 @@
-package edu.safronov.services.telegram.events;
+package edu.safronov.services.communications.telegram.events;
 
 import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;

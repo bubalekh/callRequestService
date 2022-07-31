@@ -1,18 +1,18 @@
-package edu.safronov.services.recaptcha;
+package edu.safronov.services.captcha.recaptcha;
 
 import edu.safronov.models.dto.RecaptchaResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
-@Component
+@Service
 @ConfigurationProperties(prefix = "google.recaptcha.key")
-public class RecaptchaService {
+public class RecaptchaService implements CaptchaService {
     @Getter
     @Setter
     private String site;
@@ -20,7 +20,8 @@ public class RecaptchaService {
     @Setter
     private String secret;
 
-    public boolean isHuman(@NotNull String captchaResponse) {
+    @Override
+    public boolean checkCaptcha(@NotNull String captchaResponse) {
         RestTemplate template = new RestTemplate();
         String url = "https://google.com/recaptcha/api/siteverify?secret=%s&response=%s";
         RecaptchaResponseDto response = template.postForObject(String.format(url, secret, captchaResponse), Collections.emptyList(), RecaptchaResponseDto.class);

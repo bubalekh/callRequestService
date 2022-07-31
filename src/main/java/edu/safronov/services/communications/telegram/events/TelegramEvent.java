@@ -1,6 +1,6 @@
-package edu.safronov.services.telegram.events;
+package edu.safronov.services.communications.telegram.events;
 
-import edu.safronov.services.telegram.TelegramService;
+import edu.safronov.services.communications.telegram.TelegramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
