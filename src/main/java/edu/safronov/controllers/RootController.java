@@ -16,7 +16,7 @@ import java.util.Optional;
 public class RootController {
 
     @Autowired
-    private TelegramService telegramService;
+    private TelegramService telegramServiceImpl;
     @Autowired
     private RecaptchaService recaptchaService;
     @Autowired
@@ -45,10 +45,10 @@ public class RootController {
     {
         callRequest.addTimeToDate(callRequest.getTime());
         model.addAttribute("callRequest", callRequest);
-        if (recaptchaService.isHuman(recaptchaResponse)) {
+        if (recaptchaService.checkCaptcha(recaptchaResponse)) {
             callRequest.setActive(true);
             callRequestRepository.save(callRequest);
-            telegramService.callRequestNotification(callRequest, true);
+            telegramServiceImpl.notify(callRequest, "newRequest");
             schedulerService.checkNewRequest(callRequest);
             return templateType + "result";
         }
