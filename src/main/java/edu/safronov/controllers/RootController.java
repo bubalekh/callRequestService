@@ -2,9 +2,9 @@ package edu.safronov.controllers;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
-import edu.safronov.services.captcha.recaptcha.RecaptchaService;
-import edu.safronov.services.scheduler.SchedulerService;
+import edu.safronov.services.captcha.recaptcha.CaptchaService;
 import edu.safronov.services.communications.telegram.CallRequestNotification;
+import edu.safronov.services.scheduler.SchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +18,7 @@ public class RootController {
     @Autowired
     private CallRequestNotification notificationService;
     @Autowired
-    private RecaptchaService captchaService;
+    private CaptchaService captchaService;
     @Autowired
     private SchedulerService schedulerService;
     @Autowired

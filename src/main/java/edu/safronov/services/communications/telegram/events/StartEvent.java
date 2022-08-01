@@ -9,7 +9,8 @@ public class StartEvent implements TelegramEvent {
 
     @Override
     public void handleEvent(Update update, SendMessage message) {
-        message.setText("Для работы с данным ботом Вам необходимо авторизоваться по паролю (Пример: /auth 12345)");
+        message.setText("Для работы с данным ботом Вам необходимо авторизоваться по паролю (Пример: /auth 12345) \n"
+        + "Напишите /help для вывода списка доступных команд");
     }
 
     @Override
