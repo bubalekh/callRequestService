@@ -1,6 +1,6 @@
 FROM arm64v8/openjdk:18.0.2-jdk
 
-COPY ./ ./
+COPY deploy ./
 
 RUN mvn clean package
 
