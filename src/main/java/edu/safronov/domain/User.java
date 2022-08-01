@@ -17,4 +17,13 @@ public class User {
     @Getter
     @Setter
     private Long chatId;
+
+    @Transient
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", chatId=" + chatId +
+                '}';
+    }
 }
