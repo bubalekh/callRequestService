@@ -6,4 +6,4 @@ RUN mvn clean package
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "target/callRequestService-jar-with-dependencies.jar"]
+ENTRYPOINT ["mvn", "spring-boot:run"]
