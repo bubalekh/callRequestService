@@ -1,4 +1,4 @@
-FROM arm64v8/openjdk:18.0.2-jdk
+FROM arm64v8/maven:3.8.6-openjdk-18-slim
 
 COPY ./ ./
 
