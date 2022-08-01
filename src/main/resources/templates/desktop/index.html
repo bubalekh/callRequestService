@@ -3,43 +3,43 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <link th:href="@{~/styles/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{~/styles/bootstrap.min.css}" type="text/css"/>
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-<form action="#" th:action="@{/request}" th:object="${callRequest}" method="post">
+<form action="#" method="post" th:action="@{/request}" th:object="${callRequest}">
     <div class="rendered-form">
         <div class="formbuilder-text form-group field-firstName">
-            <label for="firstName" class="formbuilder-text-label">Ваше имя<span
+            <label class="formbuilder-text-label" for="firstName">Ваше имя<span
                     class="formbuilder-required">*</span></label>
-            <input type="text" th:field="*{name}" placeholder="Сергей" class="form-control" name="firstName" access="false"
-                   maxlength="20" id="firstName" required="required" aria-required="true">
+            <input access="false" aria-required="true" class="form-control" id="firstName" maxlength="20"
+                   name="firstName"
+                   placeholder="Сергей" required="required" th:field="*{name}" type="text">
         </div>
         <div class="formbuilder-text form-group field-phone">
-            <label for="phone" class="formbuilder-text-label">Ваш номер телефона<span
+            <label class="formbuilder-text-label" for="phone">Ваш номер телефона<span
                     class="formbuilder-required">*</span></label>
-            <input type="text" th:field="*{phone}" placeholder="+7(987)123-456-78-90" class="form-control" name="phone" access="false"
-                   maxlength="20" id="phone" required="required" aria-required="true">
+            <input access="false" aria-required="true" class="form-control" id="phone" maxlength="20"
+                   name="phone"
+                   placeholder="+7(987)123-456-78-90" required="required" th:field="*{phone}" type="text">
         </div>
         <div class="formbuilder-date form-group field-date">
-            <label for="date" class="formbuilder-date-label">Выберите дату для звонка<span class="formbuilder-required">*</span></label>
-            <input type="date" th:field="*{date}" class="form-control" access="false" value="2022-07-14" id="date"
-                   required="required" aria-required="true">
+            <label class="formbuilder-date-label" for="date">Выберите дату для звонка<span class="formbuilder-required">*</span></label>
+            <input access="false" aria-required="true" class="form-control" id="date" required="required" th:field="*{date}"
+                   type="date" value="2022-07-14">
         </div>
-        <div class="formbuilder-select form-group field-selectTime">
-            <label for="selectTime" class="formbuilder-select-label">Укажите время для звонка<span
+        <div class="formbuilder-time form-group field-selectTime">
+            <label class="formbuilder-select-label" for="selectTime">Укажите время для звонка<span
                     class="tooltip-element"
                     tooltip="Если вы не укажете время для звонка, то я перезвоню Вам в течение дня в удобное для меня время.">?</span></label>
-            <select class="form-control" id="selectTime" th:field="*{time}">
-                <option value="0">Выберите время</option>
-                <option th:each="i : ${callRequest.availableTime}" th:value="${i}" th:text="${i}"></option>
-            </select>
+            <input id="selectTime" max="19:00" min="09:00" th:field="*{time}" type="time" class="form-control">
+            <small>Доступное для звонков вермя с 09:00 до 19:00</small>
         </div>
         <div class="g-recaptcha form-group col-sm-5" th:attr="data-sitekey=${@recaptchaService.getSite()}"></div>
-        <span id="captchaError" class="alert alert-danger col-sm-4" style="display:none"></span>
+        <span class="alert alert-danger col-sm-4" id="captchaError" style="display:none"></span>
         <div class="formbuilder-button form-group field-buttonSubmit">
-            <button type="submit" class="btn-primary btn" name="buttonSubmit" access="false" style="primary"
-                    id="buttonSubmit">Запланировать звонок
+            <button access="false" class="btn-primary btn" id="buttonSubmit" name="buttonSubmit" style="primary"
+                    type="submit">Запланировать звонок
             </button>
         </div>
     </div>
