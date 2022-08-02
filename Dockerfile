@@ -1,9 +1,8 @@
-FROM arm64v8/maven:3.8.6-openjdk-18-slim
-
-COPY ./ ./
-
-RUN mvn clean package
-
-EXPOSE 8080
-
-ENTRYPOINT ["mvn", "spring-boot:run"]
+# build
+FROM maven:3-openjdk-18 AS builder
+WORKDIR /usr/src/app
+COPY pom.xml .
+RUN mvn -B -e -C -T 1C org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+COPY . .
+RUN mvn -B -e -o -T 1C verify --fail-never
+RUN mvn -B -e -o -T 1C clean package
