@@ -5,10 +5,9 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 public class CallRequest implements Comparable<CallRequest> {
@@ -26,9 +25,18 @@ public class CallRequest implements Comparable<CallRequest> {
     @Getter
     @Setter
     private String phone;
+    @Transient
+    @Setter
     private String date;
+
+    @Setter
+    private String notificationDate;
+    @Transient
     @Getter
     private String time;
+    @Getter
+    @Setter
+    private Long userId;
 
     @Getter
     @Setter
@@ -40,11 +48,7 @@ public class CallRequest implements Comparable<CallRequest> {
     }
 
     public String getDate() {
-        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-    }
-
-    public void setDate(String date) throws ParseException {
-        this.date = date;
+        return this.dateTime.toLocalDate().toString();
     }
 
     public int getHours() {
@@ -59,6 +63,13 @@ public class CallRequest implements Comparable<CallRequest> {
         return this.dateTime;
     }
 
+    public String getNotificationDate() {
+        if (this.time != null) {
+            addTimeToDate(this.time);
+        }
+        return this.dateTime.toLocalDateTime().toString();
+    }
+
     public void setTime(String time) {
         this.time = time;
         Time timeWrapper = new Time(time);
@@ -70,14 +81,17 @@ public class CallRequest implements Comparable<CallRequest> {
         }
     }
 
-
     @Override
     public String toString() {
-        return "CallRequestModel{" +
-                "name='" + name + '\'' +
+        return "CallRequest{" +
+                "dateTime=" + dateTime +
+                ", id=" + id +
+                ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
-                ", date=" + date +
+                ", date='" + date + '\'' +
                 ", time='" + time + '\'' +
+                ", userId=" + userId +
+                ", active=" + active +
                 '}';
     }
 
@@ -92,12 +106,10 @@ public class CallRequest implements Comparable<CallRequest> {
 
     @Override
     public int compareTo(@NotNull CallRequest o) {
-        if (this.getHours() > o.getHours()) {
-            if (this.getMinutes() > o.getMinutes()) {
-                return 1;
-            } else return -1;
-        } else if (this.getHours() < o.getHours())
+        if (LocalDate.parse(o.getDate()).isAfter(this.getDateTime().toLocalDate())) {
             return -1;
-        return 0;
+        } else if (LocalDate.parse(o.getDate()).isBefore(this.getDateTime().toLocalDate())) {
+            return 1;
+        } else return 0;
     }
 }

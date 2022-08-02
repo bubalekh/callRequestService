@@ -24,18 +24,27 @@ public class RootController {
     @Autowired
     private CallRequestRepository callRequestRepository;
     private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
+
     @GetMapping("/")
-    public String showRootView(@RequestHeader("User-Agent") String agent,
+    public String showRequestForm(@RequestHeader("User-Agent") String agent,
+                               @RequestParam(value = "user_id", required = false) Long userId,
                                Model model)
     {
-        model.addAttribute("callRequest", new CallRequest());
+        CallRequest callRequest = new CallRequest();
         Optional<String> mobileHeader = Optional.ofNullable(agent);
         if (mobileHeader.isPresent()) {
             if (mobileHeader.get().contains("Android") || mobileHeader.get().contains("iPhone")) {
                 //templateType = "mobile/"; //TODO: необходимо разработать шаблон для смартфонов
             }
         }
-        return templateType + "index";
+        if (userId != null) {
+            callRequest.setUserId(userId);
+            model.addAttribute("callRequest", callRequest);
+            return templateType + "request";
+        }
+        else {
+            return templateType + "index";
+        }
     }
 
     @PostMapping("/request")
@@ -52,6 +61,6 @@ public class RootController {
             schedulerService.checkNewRequest(callRequest);
             return templateType + "result";
         }
-        return templateType + "index";
+        return templateType + "request";
     }
 }
