@@ -67,10 +67,8 @@ public class TelegramService extends TelegramLongPollingBot implements CallReque
             SendMessage message = new SendMessage();
             message.setText(notifications.getOrDefault(type, new DefaultNotification()).getNotificationMessage(request));
             try {
-                for (User user : userRepository.findAll()) {
-                    message.setChatId(user.getChatId());
-                    execute(message);
-                }
+                message.setChatId(request.getUserId());
+                execute(message);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
