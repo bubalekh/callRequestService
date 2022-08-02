@@ -1,48 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" th:href="@{~/styles/bootstrap.min.css}" type="text/css"/>
-    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-<form action="#" method="post" th:action="@{/request}" th:object="${callRequest}">
-    <div class="rendered-form">
-        <div class="formbuilder-text form-group field-firstName">
-            <label class="formbuilder-text-label" for="firstName">Ваше имя<span
-                    class="formbuilder-required">*</span></label>
-            <input access="false" aria-required="true" class="form-control" id="firstName" maxlength="20"
-                   name="firstName"
-                   placeholder="Сергей" required="required" th:field="*{name}" type="text">
-        </div>
-        <div class="formbuilder-text form-group field-phone">
-            <label class="formbuilder-text-label" for="phone">Ваш номер телефона<span
-                    class="formbuilder-required">*</span></label>
-            <input access="false" aria-required="true" class="form-control" id="phone" maxlength="20"
-                   name="phone"
-                   placeholder="+7(987)123-456-78-90" required="required" th:field="*{phone}" type="text">
-        </div>
-        <div class="formbuilder-date form-group field-date">
-            <label class="formbuilder-date-label" for="date">Выберите дату для звонка<span class="formbuilder-required">*</span></label>
-            <input access="false" aria-required="true" class="form-control" id="date" required="required" th:field="*{date}"
-                   type="date" value="2022-07-14">
-        </div>
-        <div class="formbuilder-time form-group field-selectTime">
-            <label class="formbuilder-select-label" for="selectTime">Укажите время для звонка<span
-                    class="tooltip-element"
-                    tooltip="Если вы не укажете время для звонка, то я перезвоню Вам в течение дня в удобное для меня время.">?</span></label>
-            <input id="selectTime" max="19:00" min="09:00" th:field="*{time}" type="time" class="form-control">
-            <small>Доступное для звонков вермя с 09:00 до 19:00</small>
-        </div>
-        <div class="g-recaptcha form-group col-sm-5" th:attr="data-sitekey=${@recaptchaService.getSite()}"></div>
-        <span class="alert alert-danger col-sm-4" id="captchaError" style="display:none"></span>
-        <div class="formbuilder-button form-group field-buttonSubmit">
-            <button access="false" class="btn-primary btn" id="buttonSubmit" name="buttonSubmit" style="primary"
-                    type="submit">Запланировать звонок
-            </button>
-        </div>
-    </div>
-</form>
+
 </body>
 </html>
