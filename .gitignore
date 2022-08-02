@@ -2,6 +2,7 @@
 /*
 
 # Except essential
+!/.github
 !/src
 !/.dockerignore
 !/.gitignore
