@@ -12,6 +12,6 @@ FROM eclipse-temurin:18-jre AS runtime
 RUN addgroup --system app && \
     adduser --system --home /opt/app --ingroup app app
 WORKDIR /opt/app
-COPY --from=builder --chown=app:app /usr/src/app/target/*.war /opt/app/app.jar
+COPY --from=builder --chown=app:app /usr/src/app/target/*.jar /opt/app/app.jar
 USER app:app
 ENTRYPOINT [ "java", "-jar", "/opt/app/app.jar" ]
