@@ -1,0 +1,10 @@
+# Exclude all
+/*
+
+# Except essential
+!/src
+!/.dockerignore
+!/.gitignore
+!/deploy.sh
+!/Dockerfile
+!/pom.xml
