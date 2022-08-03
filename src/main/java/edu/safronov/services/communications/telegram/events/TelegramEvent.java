@@ -34,7 +34,7 @@ public interface TelegramEvent {
      *               all registered events.
      */
     @Autowired
-    default void registerEvent(TelegramService service) {
+    default void registerSelf(TelegramService service) {
         service.getEvents().put(getEventCommand(), this);
     }
 
