@@ -7,7 +7,7 @@
     <script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
-<form action="#" method="post" th:action="@{/request}" th:object="${callRequest}">
+<form action="#" method="post" th:action="@{/request}" th:object="${callRequestDto}">
     <input type="hidden" id="userId" name="userId" th:field="*{userId}">
     <div class="rendered-form">
         <div class="formbuilder-text form-group field-firstName">

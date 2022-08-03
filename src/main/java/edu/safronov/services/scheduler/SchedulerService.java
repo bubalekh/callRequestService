@@ -58,11 +58,11 @@ public class SchedulerService {
     private void scheduleNotification(List<CallRequest> activeRequests) {
 
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
-        var yearsToAdd = activeRequests.get(0).getDateTime().getYear() - now.getYear();
-        var monthsToAdd = activeRequests.get(0).getDateTime().getMonthValue() - now.getMonthValue();
-        var daysToAdd = activeRequests.get(0).getDateTime().getDayOfYear() - now.getDayOfYear();
-        var hoursToAdd = activeRequests.get(0).getHours() - now.getHour();
-        var minutesToAdd = activeRequests.get(0).getMinutes() - now.getMinute() - 1;
+        var yearsToAdd = activeRequests.get(0).getDate().getYear() - now.getYear();
+        var monthsToAdd = activeRequests.get(0).getDate().getMonthValue() - now.getMonthValue();
+        var daysToAdd = activeRequests.get(0).getDate().getDayOfYear() - now.getDayOfYear();
+        var hoursToAdd = activeRequests.get(0).getDate().getHour() - now.getHour();
+        var minutesToAdd = activeRequests.get(0).getDate().getMinute() - now.getMinute() - 1;
         ZonedDateTime nextRun = now.plusYears(yearsToAdd).plusMonths(monthsToAdd).plusDays(daysToAdd).plusHours(hoursToAdd).plusMinutes(minutesToAdd);
         Duration duration = Duration.between(now, nextRun);
         long delay = duration.getSeconds();
