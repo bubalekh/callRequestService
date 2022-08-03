@@ -5,6 +5,8 @@ import edu.safronov.models.dto.CallRequestDto;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class CallRequestUtils {
@@ -13,20 +15,15 @@ public class CallRequestUtils {
         return "+7" + temp.substring(temp.length() - 10);
     }
 
-    private static void addTimeToDate(@NotNull String time, LocalDateTime dateTime) {
-        if (time.length() == 5) {
-            var hours = Integer.parseInt(time.substring(0, time.indexOf(':')));
-            var minutes = Integer.parseInt(time.substring(time.indexOf(':') + 1));
-            dateTime = dateTime.plusHours(hours).plusMinutes(minutes);
-        }
-    }
-
     public static void cloneValues(CallRequestDto dto, CallRequest entity) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         entity.setUserId(dto.getUserId());
+        if (dto.getTime() == null)
+            dto.setTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow")).format(DateTimeFormatter.ofPattern("HH:mm")));
+        if (dto.getDate() == null)
+            dto.setDate(ZonedDateTime.now(ZoneId.of("Europe/Moscow")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         String dateAndTimeToParse = dto.getDate() + " " + dto.getTime();
         entity.setDate(LocalDateTime.parse(dateAndTimeToParse, formatter));
-        //addTimeToDate(dto.getTime(), entity.getDate());
         entity.setName(dto.getName());
         entity.setPhone(dto.getPhone());
     }
