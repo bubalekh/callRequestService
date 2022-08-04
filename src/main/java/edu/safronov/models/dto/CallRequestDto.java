@@ -44,7 +44,6 @@ public class CallRequestDto {
     public String getDate(){
         if (this.date == null)
             return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                .toLocalDateTime()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         return this.date;
     }
@@ -52,7 +51,6 @@ public class CallRequestDto {
     public String getTime() {
         if (this.time == null)
             return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                    .toLocalDateTime()
                     .format(DateTimeFormatter.ofPattern("HH:mm"));
         return this.time;
     }

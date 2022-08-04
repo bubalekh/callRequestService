@@ -35,8 +35,9 @@ public class ListActiveParameter implements EventParameter {
         List<CallRequest> activeRequests = requests.filter(request -> Objects.equals(request.getUserId(), update.getMessage().getChatId())).filter(CallRequest::isActive).toList();
         if (!activeRequests.isEmpty()) {
             StringBuilder result = new StringBuilder();
-            result.append("У вас ").append(activeRequests.size()).append(" запланированных звонков! \n");
-            activeRequests.forEach(request -> result.append("Пользователь ")
+            result.append("У вас ").append(activeRequests.size()).append(" запланированных звонков!");
+            activeRequests.forEach(request -> result.append("\n\n")
+                    .append("Пользователь ")
                     .append(request.getName())
                     .append(" ожидает Вашего звонка ")
                     .append(request.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))

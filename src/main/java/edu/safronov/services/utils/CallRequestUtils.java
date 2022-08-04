@@ -16,14 +16,17 @@ public class CallRequestUtils {
     }
 
     public static void cloneValues(CallRequestDto dto, CallRequest entity) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+                .withZone(ZoneId.of("Europe/Moscow"));
         entity.setUserId(dto.getUserId());
         if (dto.getTime() == null)
-            dto.setTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow")).format(DateTimeFormatter.ofPattern("HH:mm")));
+            dto.setTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+                    .format(DateTimeFormatter.ofPattern("HH:mm")));
         if (dto.getDate() == null)
-            dto.setDate(ZonedDateTime.now(ZoneId.of("Europe/Moscow")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            dto.setDate(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         String dateAndTimeToParse = dto.getDate() + " " + dto.getTime();
-        entity.setDate(LocalDateTime.parse(dateAndTimeToParse, formatter));
+        entity.setDate(ZonedDateTime.parse(dateAndTimeToParse, formatter));
         entity.setName(dto.getName());
         entity.setPhone(dto.getPhone());
     }
