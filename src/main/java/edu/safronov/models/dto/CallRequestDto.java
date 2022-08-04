@@ -59,13 +59,13 @@ public class CallRequestDto {
 
     public String getName() {
         if (this.name == null)
-            return "NULL Name!!!";
+            return "";
         return this.name;
     }
 
     public String getPhone() {
         if (this.phone == null) {
-            return "NULL Phone!!!";
+            return "";
         }
         return this.phone;
     }
