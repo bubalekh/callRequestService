@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
 public class CallRequest implements Comparable<CallRequest>{
@@ -24,7 +25,7 @@ public class CallRequest implements Comparable<CallRequest>{
 
     @Getter
     @Setter
-    private LocalDateTime date;
+    private ZonedDateTime date;
 
     @Getter
     @Setter
