@@ -33,7 +33,7 @@ public class ListAllParameter implements EventParameter{
     @Override
     public void handleParameter(Stream<CallRequest> requests, Update update, SendMessage message) {
         message.setText("Ваш список заявок пуст!");
-        List<CallRequest> allRequests = requests.filter(request -> Objects.equals(request.getUserId(), update.getMessage().getChatId())).toList();
+        List<CallRequest> allRequests = requests.filter(request -> Objects.equals(request.getUserId(), update.getMessage().getChatId())).sorted().toList();
         if (!allRequests.isEmpty()) {
             StringBuilder result = new StringBuilder();
             result.append("В вашем списке ").append(allRequests.size()).append(" заявок на звонок: \n\n");
