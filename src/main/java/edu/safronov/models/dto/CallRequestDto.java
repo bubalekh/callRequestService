@@ -3,20 +3,21 @@ package edu.safronov.models.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class CallRequestDto {
 
-    @Getter
     @Setter
     private String name;
-    @Getter
+
     @Setter
     private String phone;
 
-    @Getter
     @Setter
     private String date;
 
-    @Getter
     @Setter
     private String time;
 
@@ -38,5 +39,34 @@ public class CallRequestDto {
                 ", userId=" + userId +
                 ", active=" + active +
                 '}';
+    }
+
+    public String getDate(){
+        if (this.date == null)
+            return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+                .toLocalDateTime()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return this.date;
+    }
+
+    public String getTime() {
+        if (this.time == null)
+            return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
+                    .toLocalDateTime()
+                    .format(DateTimeFormatter.ofPattern("HH:mm"));
+        return this.time;
+    }
+
+    public String getName() {
+        if (this.name == null)
+            return "NULL Name!!!";
+        return this.name;
+    }
+
+    public String getPhone() {
+        if (this.phone == null) {
+            return "NULL Phone!!!";
+        }
+        return this.phone;
     }
 }

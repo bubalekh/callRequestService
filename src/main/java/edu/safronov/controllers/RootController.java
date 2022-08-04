@@ -25,7 +25,7 @@ public class RootController {
     private SchedulerService schedulerService;
     @Autowired
     private CallRequestRepository callRequestRepository;
-    private String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
+    private final String templateType = "desktop/"; //По умолчанию отдаем шаблон для десктопов
 
     @GetMapping("/")
     public String showRequestForm(@RequestHeader("User-Agent") String agent,
@@ -54,7 +54,7 @@ public class RootController {
                               @RequestParam("g-recaptcha-response") String captchaResponse,
                               Model model)
     {
-        model.addAttribute("callRequest", callRequestDto);
+        model.addAttribute("callRequestDto", callRequestDto);
         if (captchaService.checkCaptcha(captchaResponse)) {
             CallRequest callRequest = new CallRequest();
             CallRequestUtils.cloneValues(callRequestDto, callRequest);
