@@ -37,24 +37,25 @@ public class SchedulerService {
     }
 
     private void checkRequests(boolean onStartupUse) {
-        List<CallRequest> activeRequests;
-        Stream<CallRequest> callRequestStream = StreamSupport.stream(callRequestRepository.findAll().spliterator(), true)
+        List<CallRequest> activeRequests = new LinkedList<>(StreamSupport.stream(callRequestRepository.findAll().spliterator(), true)
                 .filter(CallRequest::isActive)
-                .sorted();
+                .sorted()
+                .toList());
         if (!onStartupUse)
-            activeRequests = new LinkedList<>(callRequestStream.filter(request -> !request.isScheduling()).toList());
-        else activeRequests = new LinkedList<>(callRequestStream.toList());
+            activeRequests.removeIf(CallRequest::isScheduling);
         if (!activeRequests.isEmpty()) {
             activeRequests.removeIf(request -> request.getDate() != activeRequests.get(0).getDate());
+            activeRequests.forEach(request -> request.setScheduling(true));
+            callRequestRepository.saveAll(activeRequests);
             scheduleNotifications(activeRequests);
         }
     }
 
     public void scheduleNewRequest(CallRequest request) {
         request.setActive(true);
-        request.setScheduling(true);
+        request.setScheduling(false);
         callRequestRepository.save(request);
-        scheduleNotifications(List.of(request));
+        checkRequests(false);
     }
 
     @Async("threadPoolTaskExecutor")
