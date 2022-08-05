@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +41,9 @@ public class ListActiveParameter implements EventParameter {
                     .append("Пользователь ")
                     .append(request.getName())
                     .append(" ожидает Вашего звонка ")
-                    .append(request.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .append(request.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.of("Europe/Moscow"))))
                     .append(" в ")
-                    .append(request.getDate().format(DateTimeFormatter.ofPattern("HH:mm")))
+                    .append(request.getDate().format(DateTimeFormatter.ofPattern("HH:mm").withZone(ZoneId.of("Europe/Moscow"))))
                     .append(". Номер телефона: ").append(CallRequestUtils.getParsedPhone(request.getPhone()))
                     .append("\n\n"));
             message.setText(result.toString());
