@@ -58,10 +58,8 @@ public class RootController {
         if (captchaService.checkCaptcha(captchaResponse)) {
             CallRequest callRequest = new CallRequest();
             CallRequestUtils.cloneValues(callRequestDto, callRequest);
-            callRequest.setActive(true);
-            callRequestRepository.save(callRequest);
             notificationService.notify(callRequest, "newRequest");
-            schedulerService.checkNewRequest(callRequest);
+            schedulerService.scheduleNewRequest(callRequest);
             return templateType + "result";
         }
         return templateType + "request";
