@@ -50,12 +50,11 @@ public class SchedulerService {
         }
     }
 
-    public void checkNewRequest(CallRequest request) {
-        if (request.isActive()) {
-            request.setScheduling(true);
-            callRequestRepository.save(request);
-            scheduleNotifications(List.of(request));
-        }
+    public void scheduleNewRequest(CallRequest request) {
+        request.setActive(true);
+        request.setScheduling(true);
+        callRequestRepository.save(request);
+        scheduleNotifications(List.of(request));
     }
 
     @Async("threadPoolTaskExecutor")
