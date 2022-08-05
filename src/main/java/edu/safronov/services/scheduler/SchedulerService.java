@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -31,50 +30,47 @@ public class SchedulerService {
     public SchedulerService(CallRequestRepository repository) {
         try {
             this.callRequestRepository = repository;
-            checkRequests();
+            checkRequests(true);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public void checkRequests() {
-//        if (callRequestRepository.findAll().iterator().hasNext()) {
-//            callRequestRepository.findAll().forEach(request -> {
-//                if (request.isActive()) activeRequests.add(request);
-//            });
-//            try {
-//                scheduleNotification(activeRequests.stream().sorted().toList());
-//            } catch (IndexOutOfBoundsException ignored) {
-//            }
-//        }
-        List<CallRequest> activeRequests = new ArrayList<>(StreamSupport.stream(callRequestRepository.findAll().spliterator(), true)
+    private void checkRequests(boolean onStartupUse) {
+        List<CallRequest> activeRequests;
+        Stream<CallRequest> callRequestStream = StreamSupport.stream(callRequestRepository.findAll().spliterator(), true)
                 .filter(CallRequest::isActive)
-                .sorted()
-                .toList());
+                .sorted();
+        if (!onStartupUse)
+            activeRequests = new LinkedList<>(callRequestStream.filter(request -> !request.isScheduling()).toList());
+        else activeRequests = new LinkedList<>(callRequestStream.toList());
         if (!activeRequests.isEmpty()) {
             activeRequests.removeIf(request -> request.getDate() != activeRequests.get(0).getDate());
-            scheduleNotification(activeRequests);
+            scheduleNotifications(activeRequests);
         }
     }
 
     public void checkNewRequest(CallRequest request) {
         if (request.isActive()) {
-            scheduleNotification(List.of(request));
+            request.setScheduling(true);
+            callRequestRepository.save(request);
+            scheduleNotifications(List.of(request));
         }
     }
 
     @Async("threadPoolTaskExecutor")
-    private void scheduleNotification(List<CallRequest> activeRequests) {
+    private void scheduleNotifications(List<CallRequest> activeRequests) {
         if (!activeRequests.isEmpty()) {
             ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Moscow"));
-            long delay = activeRequests.get(0).getDate().getLong(ChronoField.INSTANT_SECONDS) - now.getLong(ChronoField.INSTANT_SECONDS);
+            long delay = activeRequests.get(0).getDate().getLong(ChronoField.INSTANT_SECONDS) - now.getLong(ChronoField.INSTANT_SECONDS) - 60;
 
             ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
             Runnable notificationTask = () -> activeRequests.forEach(request -> {
                 request.setActive(false);
+                request.setScheduling(false);
                 notificationService.notify(request, "scheduledRequest");
                 callRequestRepository.save(request);
-                checkRequests();
+                checkRequests(false);
             });
             executorService.schedule(notificationTask, delay, TimeUnit.SECONDS);
         }
