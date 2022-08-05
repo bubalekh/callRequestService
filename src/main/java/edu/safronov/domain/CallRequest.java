@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -33,7 +32,11 @@ public class CallRequest implements Comparable<CallRequest>{
 
     @Getter
     @Setter
-    private boolean active;
+    private boolean active = false;
+
+    @Getter
+    @Setter
+    private boolean isScheduling = false;
 
     @Override
     public String toString() {
