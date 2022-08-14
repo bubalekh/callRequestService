@@ -14,7 +14,7 @@ public class CallRequest implements Comparable<CallRequest>{
     @Column(name = "id", nullable = false)
     @Getter
     @Setter
-    private Integer id;
+    private Long id;
     @Getter
     @Setter
     private String name;
