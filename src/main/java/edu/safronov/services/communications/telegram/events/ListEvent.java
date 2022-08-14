@@ -6,6 +6,7 @@ import edu.safronov.repos.UserRepository;
 import edu.safronov.services.communications.telegram.events.parameters.DefaultParameter;
 import edu.safronov.services.communications.telegram.events.parameters.EventParameter;
 import edu.safronov.services.utils.EventUtils;
+import edu.safronov.services.utils.UserUtils;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,7 +35,7 @@ public class ListEvent implements TelegramEvent {
         message.setText("""
                 Вы не можете получить список запланированных звонков так как еще не начали работать с сервисом.\s
                 Для начала работы отправьте команду /start""");
-        if (EventUtils.getUserByUserId(userRepository, update.getMessage().getChatId()).isPresent()) {
+        if (UserUtils.getUserByUserId(userRepository, update.getMessage().getChatId()).isPresent()) {
             message.setText("""
                     Вызвана команда /list без агрументов!\s
                     Для корректной работы данной команды необходимо указать аргумент.\s

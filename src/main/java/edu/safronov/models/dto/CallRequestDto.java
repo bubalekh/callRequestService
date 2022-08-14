@@ -1,6 +1,5 @@
 package edu.safronov.models.dto;
 
-import edu.safronov.domain.Time;
 import lombok.Getter;
 import lombok.Setter;
 

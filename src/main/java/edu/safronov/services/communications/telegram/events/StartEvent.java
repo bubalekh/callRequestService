@@ -2,7 +2,7 @@ package edu.safronov.services.communications.telegram.events;
 
 import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;
-import edu.safronov.services.utils.EventUtils;
+import edu.safronov.services.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class StartEvent implements TelegramEvent {
     @Override
     public void handleEvent(Update update, SendMessage message) {
         message.setText("Ошибка! Что-то пошло не так!");
-        if (EventUtils.getUserByUserId(repository, update.getMessage().getChatId()).isEmpty()) {
+        if (UserUtils.getUserByUserId(repository, update.getMessage().getChatId()).isEmpty()) {
             message.setText("Вы успешно авторизовались в системе! Ваша персональная ссылка " + getPersonalUrl(url, update.getMessage().getChatId()));
             User user = new User();
             user.setChatId(update.getMessage().getChatId());

@@ -4,7 +4,8 @@ import edu.safronov.domain.CallRequest;
 import edu.safronov.models.dto.CallRequestDto;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class CallRequestUtilsTest {
 
@@ -18,8 +19,9 @@ class CallRequestUtilsTest {
         callRequestDto.setName("userName");
 
         CallRequest callRequest = CallRequestUtils.mapFromCallRequestDto(callRequestDto);
+
         assertEquals(callRequestDto.getName(), callRequest.getName());
-        assertEquals(CallRequestUtils.getParsedPhone(callRequestDto.getPhone()), callRequest.getPhone());
+        assertEquals(callRequestDto.getPhone(), callRequest.getPhone());
         assertEquals(callRequestDto.getUserId(), callRequest.getUserId());
         assertNotEquals(callRequestDto.getUserId(), callRequest.getId());
         assertEquals(callRequestDto.getDateTime(), callRequest.getDate());
