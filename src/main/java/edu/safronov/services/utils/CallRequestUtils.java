@@ -2,7 +2,9 @@ package edu.safronov.services.utils;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.models.dto.CallRequestDto;
+import org.modelmapper.ModelMapper;
 
+import javax.print.attribute.standard.Destination;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,19 +17,13 @@ public class CallRequestUtils {
         return "+7" + temp.substring(temp.length() - 10);
     }
 
-    public static void cloneValues(CallRequestDto dto, CallRequest entity) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-                .withZone(ZoneId.of("Europe/Moscow"));
-        entity.setUserId(dto.getUserId());
-        if (dto.getTime() == null)
-            dto.setTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                    .format(DateTimeFormatter.ofPattern("HH:mm")));
-        if (dto.getDate() == null)
-            dto.setDate(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-        String dateAndTimeToParse = dto.getDate() + " " + dto.getTime();
-        entity.setDate(ZonedDateTime.parse(dateAndTimeToParse, formatter));
-        entity.setName(dto.getName());
-        entity.setPhone(dto.getPhone());
+    public static CallRequest mapFromCallRequestDto(CallRequestDto dto) {
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.typeMap(CallRequestDto.class, CallRequest.class).addMappings(mapper -> {
+            mapper.skip(CallRequest::setId);
+            mapper.map(CallRequestDto::getDateTime,
+                    CallRequest::setDate);
+        });
+        return modelMapper.map(dto, CallRequest.class);
     }
 }

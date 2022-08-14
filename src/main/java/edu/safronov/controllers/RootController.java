@@ -56,8 +56,9 @@ public class RootController {
     {
         model.addAttribute("callRequestDto", callRequestDto);
         if (captchaService.checkCaptcha(captchaResponse)) {
-            CallRequest callRequest = new CallRequest();
-            CallRequestUtils.cloneValues(callRequestDto, callRequest);
+            /*CallRequest callRequest = new CallRequest();
+            CallRequestUtils.cloneValues(callRequestDto, callRequest);*/
+            CallRequest callRequest = CallRequestUtils.mapFromCallRequestDto(callRequestDto);
             notificationService.notify(callRequest, "newRequest");
             schedulerService.scheduleNewRequest(callRequest);
             return templateType + "result";

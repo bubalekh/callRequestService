@@ -1,5 +1,6 @@
 package edu.safronov.models.dto;
 
+import edu.safronov.domain.Time;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,6 +54,13 @@ public class CallRequestDto {
             return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
                     .format(DateTimeFormatter.ofPattern("HH:mm"));
         return this.time;
+    }
+
+    public ZonedDateTime getDateTime() {
+        if (this.date != null && this.time != null) {
+            return ZonedDateTime.parse(this.date + " " + this.time, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm").withZone(ZoneId.of("Europe/Moscow")));
+        }
+        return ZonedDateTime.now();
     }
 
     public String getName() {
