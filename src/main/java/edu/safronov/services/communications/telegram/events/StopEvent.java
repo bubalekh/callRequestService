@@ -2,7 +2,7 @@ package edu.safronov.services.communications.telegram.events;
 
 import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;
-import edu.safronov.services.utils.UserUtils;
+import edu.safronov.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

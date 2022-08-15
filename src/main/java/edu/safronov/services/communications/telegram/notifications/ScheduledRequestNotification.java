@@ -1,7 +1,7 @@
 package edu.safronov.services.communications.telegram.notifications;
 
 import edu.safronov.domain.CallRequest;
-import edu.safronov.services.utils.NotificationUtils;
+import edu.safronov.utils.NotificationUtils;
 import org.springframework.stereotype.Component;
 
 @Component

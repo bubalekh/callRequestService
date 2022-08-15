@@ -1,6 +1,6 @@
 package edu.safronov.services.communications.telegram.events;
 
-import edu.safronov.services.utils.EventUtils;
+import edu.safronov.utils.EventUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

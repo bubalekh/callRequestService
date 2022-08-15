@@ -1,5 +1,6 @@
 package edu.safronov.models.dto;
 
+import edu.safronov.domain.Time;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,33 +26,20 @@ public class CallRequestDto {
     @Setter
     private Long userId;
 
-    @Getter
-    @Setter
-    private boolean active;
-
     @Override
     public String toString() {
-        return "CallRequestDto{" +
-                "name='" + name + '\'' +
-                ", phone='" + phone + '\'' +
-                ", date='" + date + '\'' +
-                ", time='" + time + '\'' +
-                ", userId=" + userId +
-                ", active=" + active +
-                '}';
+        return "CallRequestDto{" + "name='" + name + '\'' + ", phone='" + phone + '\'' + ", date='" + date + '\'' + ", time='" + time + '\'' + ", userId=" + userId + '}';
     }
 
-    public String getDate(){
+    public String getDate() {
         if (this.date == null)
-            return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return getValidDateTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         return this.date;
     }
 
     public String getTime() {
         if (this.time == null)
-            return ZonedDateTime.now(ZoneId.of("Europe/Moscow"))
-                    .format(DateTimeFormatter.ofPattern("HH:mm"));
+            return getValidDateTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))).format(DateTimeFormatter.ofPattern("HH:mm"));
         return this.time;
     }
 
@@ -63,8 +51,7 @@ public class CallRequestDto {
     }
 
     public String getName() {
-        if (this.name == null)
-            return "";
+        if (this.name == null) return "";
         return this.name;
     }
 
@@ -73,5 +60,19 @@ public class CallRequestDto {
             return "";
         }
         return this.phone;
+    }
+
+    public ZonedDateTime getValidDateTime(ZonedDateTime dateTime) {
+        ZonedDateTime tmpDateTime = ZonedDateTime.now();
+        tmpDateTime = tmpDateTime.minusHours(tmpDateTime.getHour())
+                .plusHours(9)
+                .minusMinutes(tmpDateTime.getMinute())
+                .minusSeconds(tmpDateTime.getSecond())
+                .minusNanos(tmpDateTime.getNano());
+        if (dateTime.isBefore(tmpDateTime))
+            return tmpDateTime;
+        if (Time.isCorrect(dateTime.getHour()))
+            return dateTime;
+        return tmpDateTime.plusDays(1);
     }
 }
