@@ -2,7 +2,7 @@ package edu.safronov.services.communications.telegram.events.parameters;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.services.communications.telegram.events.ListEvent;
-import edu.safronov.services.utils.CallRequestUtils;
+import edu.safronov.utils.CallRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -33,6 +33,7 @@ public class ListActiveParameter implements EventParameter {
 
     @Override
     public void handleParameter(Stream<CallRequest> requests, Update update, SendMessage message) {
+        message.setText("У вас не запланированных звонков!");
         List<CallRequest> activeRequests = requests.filter(request -> Objects.equals(request.getUserId(), update.getMessage().getChatId())).filter(CallRequest::isActive).toList();
         if (!activeRequests.isEmpty()) {
             StringBuilder result = new StringBuilder();

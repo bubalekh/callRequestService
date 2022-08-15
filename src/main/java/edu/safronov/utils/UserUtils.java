@@ -1,4 +1,4 @@
-package edu.safronov.services.utils;
+package edu.safronov.utils;
 
 import edu.safronov.domain.User;
 import edu.safronov.repos.UserRepository;
