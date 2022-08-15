@@ -13,8 +13,8 @@ public class Time {
 
     public Time(String time) {
         if (time.length() == 5) {
-            hours = Integer.parseInt(time.substring(0, time.indexOf(':')));
-            minutes = Integer.parseInt(time.substring(time.indexOf(':') + 1));
+            this.hours = Integer.parseInt(time.substring(0, time.indexOf(':')));
+            this.minutes = Integer.parseInt(time.substring(time.indexOf(':') + 1));
         }
     }
 
@@ -29,11 +29,10 @@ public class Time {
 
     public static boolean isCorrect(String time) {
         Time timeWrapper = new Time(time);
-        return timeWrapper.getHours() >= 9 && timeWrapper.getHours() <= 19;
+        return isCorrect(timeWrapper);
     }
 
-    public static boolean isCorrect(Integer time) {
-        Time timeWrapper = new Time(time);
-        return timeWrapper.getHours() >= 9 && timeWrapper.getHours() <= 19;
+    public static boolean isCorrect(Integer hours) {
+        return hours >= 9 && hours <= 19;
     }
 }

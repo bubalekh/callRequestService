@@ -33,13 +33,15 @@ public class CallRequestDto {
 
     public String getDate() {
         if (this.date == null)
-            return getValidDateTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            return getValidDateTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow")))
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         return this.date;
     }
 
     public String getTime() {
         if (this.time == null)
-            return getValidDateTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow"))).format(DateTimeFormatter.ofPattern("HH:mm"));
+            return getValidDateTime(ZonedDateTime.now(ZoneId.of("Europe/Moscow")))
+                    .format(DateTimeFormatter.ofPattern("HH:mm"));
         return this.time;
     }
 
