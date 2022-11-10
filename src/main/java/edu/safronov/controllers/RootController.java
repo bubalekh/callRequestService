@@ -4,7 +4,8 @@ import edu.safronov.domain.CallRequest;
 import edu.safronov.models.dto.CallRequestDto;
 import edu.safronov.repos.UserRepository;
 import edu.safronov.services.captcha.recaptcha.CaptchaService;
-import edu.safronov.services.communications.telegram.CallRequestNotification;
+import edu.safronov.services.notifications.actions.ProcessNotification;
+import edu.safronov.services.notifications.notifications.NewRequestNotification;
 import edu.safronov.services.scheduler.SchedulerService;
 import edu.safronov.utils.CallRequestUtils;
 import edu.safronov.utils.UserUtils;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class RootController {
     @Autowired
-    private CallRequestNotification notificationService;
+    private ProcessNotification notificationService;
     @Autowired
     private CaptchaService captchaService;
     @Autowired
@@ -49,7 +50,7 @@ public class RootController {
         model.addAttribute("callRequestDto", callRequestDto);
         if (captchaService.checkCaptcha(captchaResponse)) {
             CallRequest callRequest = CallRequestUtils.mapFromCallRequestDto(callRequestDto);
-            notificationService.notify(callRequest, "newRequest");
+            notificationService.processNotification(callRequest, new NewRequestNotification().getNotificationName());
             schedulerService.scheduleNewRequest(callRequest);
             return "result";
         }

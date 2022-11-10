@@ -2,7 +2,8 @@ package edu.safronov.services.scheduler;
 
 import edu.safronov.domain.CallRequest;
 import edu.safronov.repos.CallRequestRepository;
-import edu.safronov.services.communications.telegram.CallRequestNotification;
+import edu.safronov.services.notifications.actions.ProcessNotification;
+import edu.safronov.services.notifications.notifications.ScheduledRequestNotification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -15,14 +16,13 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 @Service
 public class SchedulerService {
 
     @Autowired
-    private CallRequestNotification notificationService;
+    private ProcessNotification notificationService;
 
     private CallRequestRepository callRequestRepository;
 
@@ -68,7 +68,7 @@ public class SchedulerService {
             Runnable notificationTask = () -> activeRequests.forEach(request -> {
                 request.setActive(false);
                 request.setScheduling(false);
-                notificationService.notify(request, "scheduledRequest");
+                notificationService.processNotification(request, new ScheduledRequestNotification().getNotificationName());
                 callRequestRepository.save(request);
                 checkRequests(false);
             });

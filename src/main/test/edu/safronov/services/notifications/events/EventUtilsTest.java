@@ -1,4 +1,4 @@
-package edu.safronov.services.communications.telegram.events;
+package edu.safronov.services.notifications.events;
 
 import edu.safronov.utils.EventUtils;
 import org.junit.jupiter.api.Test;

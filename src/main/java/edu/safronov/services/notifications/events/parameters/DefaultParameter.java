@@ -1,9 +1,8 @@
-package edu.safronov.services.communications.telegram.events.parameters;
+package edu.safronov.services.notifications.events.parameters;
 
 import edu.safronov.domain.CallRequest;
+import edu.safronov.models.dto.MessageDto;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +20,7 @@ public class DefaultParameter implements EventParameter{
     }
 
     @Override
-    public void handleParameter(Stream<CallRequest> requests, Update update, SendMessage message) {
+    public void handleParameter(Stream<CallRequest> requests, MessageDto messageDto, SendMessage message) {
         message.setText("Данного метода не существует!");
     }
 }

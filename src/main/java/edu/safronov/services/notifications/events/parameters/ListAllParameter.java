@@ -1,12 +1,12 @@
-package edu.safronov.services.communications.telegram.events.parameters;
+package edu.safronov.services.notifications.events.parameters;
 
 import edu.safronov.domain.CallRequest;
-import edu.safronov.services.communications.telegram.events.ListEvent;
+import edu.safronov.models.dto.MessageDto;
+import edu.safronov.services.notifications.events.ListEvent;
 import edu.safronov.utils.CallRequestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -32,9 +32,9 @@ public class ListAllParameter implements EventParameter{
     }
 
     @Override
-    public void handleParameter(Stream<CallRequest> requests, Update update, SendMessage message) {
+    public void handleParameter(Stream<CallRequest> requests, MessageDto messageDto, SendMessage message) {
         message.setText("Ваш список заявок пуст!");
-        List<CallRequest> allRequests = requests.filter(request -> Objects.equals(request.getUserId(), update.getMessage().getChatId())).sorted().toList();
+        List<CallRequest> allRequests = requests.filter(request -> Objects.equals(request.getUserId(), messageDto.getChatId())).sorted().toList();
         if (!allRequests.isEmpty()) {
             StringBuilder result = new StringBuilder();
             result.append("В вашем списке ").append(allRequests.size()).append(" заявок на звонок: \n\n");

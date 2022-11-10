@@ -1,11 +1,11 @@
-package edu.safronov.services.communications.telegram.events;
+package edu.safronov.services.notifications.events;
 
+import edu.safronov.models.dto.MessageDto;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class DefaultEvent implements TelegramEvent {
+public class DefaultEvent implements NotificationEvent {
     @Override
-    public void handleEvent(Update update, SendMessage message) {
+    public void handleEvent(MessageDto messageDto, SendMessage message) {
         message.setText("Ошибка! Данного метода не существует!");
     }
 

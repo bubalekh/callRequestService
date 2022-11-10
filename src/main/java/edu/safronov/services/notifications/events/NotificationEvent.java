@@ -1,27 +1,29 @@
-package edu.safronov.services.communications.telegram.events;
+package edu.safronov.services.notifications.events;
 
-import edu.safronov.services.communications.telegram.TelegramService;
+import edu.safronov.models.dto.MessageDto;
+import edu.safronov.services.notifications.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
+
 /**
  * Telegram Event interface that handles commands from Telegram Bot
  * @author Maxim Safronov
  * @version 1.0
  * */
-public interface TelegramEvent {
+public interface NotificationEvent {
     /**
      * Handle event method. The main idea of this method is to implement
      * all necessary business logic for a specific event. There is no
      * default implementation of this method because all events should
      * contain their own logic.
      *
-     * @param update It all starts from figuring out what came in incoming
-     *               update from Telegram bot (from text up to images and
-     *               voice messages).
-     * @param message It all ends with forming a message that should be
-     *                returned to a user. **/
-    void handleEvent(Update update, SendMessage message);
+     * @param messageDto It all starts from figuring out what came in incoming
+     *                   update from Telegram bot (from text up to images and
+     *                   voice messages).
+     * @param message    It all ends with forming a message that should be
+     *                   returned to a user.
+     **/
+    void handleEvent(MessageDto messageDto, SendMessage message);
 
     /**
      * A setter injection mechanism from Spring that allows to put
@@ -34,7 +36,7 @@ public interface TelegramEvent {
      *               all registered events.
      */
     @Autowired
-    default void registerSelf(TelegramService service) {
+    default void registerSelf(NotificationService service) {
         service.getEvents().put(getEventCommand(), this);
     }
 

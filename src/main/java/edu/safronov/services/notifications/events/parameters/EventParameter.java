@@ -1,11 +1,10 @@
-package edu.safronov.services.communications.telegram.events.parameters;
+package edu.safronov.services.notifications.events.parameters;
 
 import edu.safronov.domain.CallRequest;
-import edu.safronov.services.communications.telegram.events.ListEvent;
+import edu.safronov.models.dto.MessageDto;
+import edu.safronov.services.notifications.events.ListEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Map;
 import java.util.stream.Stream;
@@ -20,5 +19,5 @@ public interface EventParameter {
     }
     String getParameterName();
 
-    void handleParameter(Stream<CallRequest> requests, Update update, SendMessage message);
+    void handleParameter(Stream<CallRequest> requests, MessageDto messageDto, SendMessage message);
 }
